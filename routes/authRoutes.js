@@ -1,18 +1,27 @@
-const passport = require("passport");
-const router = require("express").Router();
-
-router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+const passport = require('passport');
+const router = require('express').Router();
 
 router.get(
-  "/google/return",
-  passport.authenticate("google", {
-    successRedirect: "/",
-    failureRedirect: "/login"
+  '/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+router.get(
+  '/auth/google/return',
+  passport.authenticate('google', {
+    successRedirect: '/',
+    failureRedirect: '/login',
   }),
 
   (req, res) => {
-    console.log(req);
+    console.log('user', req);
+    res.json(req.user);
   }
 );
+
+router.get('/logout', (req, res) => {
+  req.logOut();
+  res.redirect('/');
+});
 
 module.exports = router;

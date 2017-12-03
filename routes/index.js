@@ -1,10 +1,10 @@
-const router = require("express").Router();
-const authRouter = require("./authRoutes.js");
+const router = require('express').Router();
+const authRouter = require('./authRoutes.js');
 
-router.get("/", (req, res) => {
-  res.send({ hi: "there" });
+router.get('/', (req, res) => {
+  res.send(req.user);
 });
 
-router.use("/auth", authRouter);
+router.use('/', authRouter);
 
 module.exports = router;
