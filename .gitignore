@@ -1,2 +1,4 @@
 node_modules
-keys.js
+
+# Config & keys
+dev.js
