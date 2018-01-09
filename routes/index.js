@@ -2,7 +2,8 @@ const router = require('express').Router();
 const authRouter = require('./authRoutes.js');
 
 router.get('/', (req, res) => {
-  res.send(req.user);
+  if (req.user) res.send(req.user);
+  else res.send('Please Login ');
 });
 
 router.use('/', authRouter);
