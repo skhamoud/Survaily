@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Link from 'react-router-dom/Link';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { Container, Menu, Icon } from 'semantic-ui-react';
@@ -17,6 +17,11 @@ class Header extends Component {
   handleLinkClick(e, { name }) {
     this.setState({ activeLink: name });
   }
+  componentWillUpdate(nextProps) {
+    if (nextProps.auth === false) {
+      this.props.history.push('/');
+    }
+  }
 
   renderAuthMenu = () => {
     const { auth } = this.props;
@@ -33,7 +38,7 @@ class Header extends Component {
       );
     } else if (auth === null) return;
     return (
-      <Menu.Item as="a" href="/auth/google" name="signup" color="red">
+      <Menu.Item as="a" href="/auth/google" name="signup">
         Sign up with google
       </Menu.Item>
     );
@@ -41,13 +46,14 @@ class Header extends Component {
 
   render() {
     const { activeLink } = this.state;
+    const { auth } = this.props;
 
     return (
-      <Menu stackable borderless size="large">
-        <Container fluid>
-          <Menu.Item as={Link} color="red" to="/" header>
+      <Menu stackable borderless size="large" inverted color="teal">
+        <Container>
+          <Menu.Item header>
             <Icon name="home" />
-            Emaily
+            <Link to={auth ? '/surveys' : '/'}>Emaily</Link>
           </Menu.Item>
 
           <Menu.Menu position="left">
@@ -55,7 +61,6 @@ class Header extends Component {
               as={Link}
               active={activeLink === 'surveys'}
               name="surveys"
-              color="red"
               to="/surveys"
               //   onClick={this.handleLinkClick}
             >
@@ -80,10 +85,12 @@ class Header extends Component {
   }
 }
 
-function mapStateToProps({ auth }) {
+function mapStateToProps({ auth }, ownProps) {
   return {
     auth,
+    ...ownProps,
   };
 }
 
-export default connect(mapStateToProps, { logOutUser })(Header);
+// export with router to get access to router props as `history` etc...
+export default connect(mapStateToProps, { logOutUser })(withRouter(Header));

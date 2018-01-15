@@ -7,10 +7,10 @@ import 'semantic-ui-css/semantic.min.css';
 import { fetchUser } from '../actions';
 
 import Header from './Header';
+import Landing from './Landing';
 
 const Dashboard = () => <h2>Dashboard</h2>;
 const NewSurvey = () => <h2>NewSurvey</h2>;
-const Landing = () => <h2>Landing</h2>;
 class App extends React.Component {
   componentDidMount() {
     this.props.fetchUser();
