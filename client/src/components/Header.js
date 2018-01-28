@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { Container, Menu, Icon } from 'semantic-ui-react';
-
+import Payments from './Payments';
 import { logOutUser } from '../actions';
 
 class Header extends Component {
@@ -26,16 +26,23 @@ class Header extends Component {
   renderAuthMenu = () => {
     const { auth } = this.props;
     if (auth) {
-      return (
+      return [
+        <Menu.Item key="1">
+          <Payments />
+        </Menu.Item>,
+        <Menu.Item key="3" as="span">
+          Credits: {auth.credits}
+        </Menu.Item>,
         <Menu.Item
+          key="2"
           as="a"
           onClick={() => {
             this.props.logOutUser();
           }}
         >
           logout
-        </Menu.Item>
-      );
+        </Menu.Item>,
+      ];
     } else if (auth === null) return;
     return (
       <Menu.Item as="a" href="/auth/google" name="signup">
@@ -49,7 +56,7 @@ class Header extends Component {
     const { auth } = this.props;
 
     return (
-      <Menu stackable borderless size="large" inverted color="teal">
+      <Menu stackable borderless inverted color="teal">
         <Container>
           <Menu.Item header>
             <Icon name="home" />
@@ -57,13 +64,7 @@ class Header extends Component {
           </Menu.Item>
 
           <Menu.Menu position="left">
-            <Menu.Item
-              as={Link}
-              active={activeLink === 'surveys'}
-              name="surveys"
-              to="/surveys"
-              //   onClick={this.handleLinkClick}
-            >
+            <Menu.Item as={Link} active={activeLink === 'surveys'} name="surveys" to="/surveys">
               Surveys
             </Menu.Item>
             <Menu.Item
@@ -72,7 +73,6 @@ class Header extends Component {
               color="teal"
               name="newSurvey"
               to="/surveys/new"
-              //   onClick={this.handleLinkClick}
             >
               <Icon name="add" />
             </Menu.Item>
@@ -92,5 +92,5 @@ function mapStateToProps({ auth }, ownProps) {
   };
 }
 
-// export with router to get access to router props as `history` etc...
+// export with router to get access to router props such as `history` etc...
 export default connect(mapStateToProps, { logOutUser })(withRouter(Header));
