@@ -12,6 +12,7 @@
     "client": " cd client && yarn start && cd ..",
     "dev": " concurrently \"yarn server\"  \"yarn client\" ",
     "start": "node index.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false cd client && yarn && yarn build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "skhamoud",
