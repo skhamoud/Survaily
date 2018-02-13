@@ -1,4 +1,4 @@
-import { FETCH_USER, LOGOUT_USER } from '../actions/types';
+import { FETCH_USER, LOGOUT_USER, SEND_SURVEY } from '../actions/types';
 
 export default function authReducer(prevState = null, action) {
   switch (action.type) {
@@ -7,6 +7,9 @@ export default function authReducer(prevState = null, action) {
 
     case LOGOUT_USER:
       return false;
+
+    case SEND_SURVEY:
+      return action.payload.user;
 
     default:
       return prevState;

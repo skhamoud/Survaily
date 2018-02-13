@@ -17,11 +17,6 @@ class Header extends Component {
   handleLinkClick(e, { name }) {
     this.setState({ activeLink: name });
   }
-  componentWillUpdate(nextProps) {
-    if (nextProps.auth === false) {
-      this.props.history.push('/');
-    }
-  }
 
   renderAuthMenu = () => {
     const { auth } = this.props;
@@ -63,20 +58,9 @@ class Header extends Component {
             <Link to={auth ? '/surveys' : '/'}>Emaily</Link>
           </Menu.Item>
 
-          <Menu.Menu position="left">
-            <Menu.Item as={Link} active={activeLink === 'surveys'} name="surveys" to="/surveys">
-              Surveys
-            </Menu.Item>
-            <Menu.Item
-              as={Link}
-              active={activeLink === 'newSurvey'}
-              color="teal"
-              name="newSurvey"
-              to="/surveys/new"
-            >
-              <Icon name="add" />
-            </Menu.Item>
-          </Menu.Menu>
+          <Menu.Item as={Link} active={activeLink === 'surveys'} name="surveys" to="/surveys">
+            Surveys
+          </Menu.Item>
 
           <Menu.Menu position="right">{this.renderAuthMenu()}</Menu.Menu>
         </Container>
