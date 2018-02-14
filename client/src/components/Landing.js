@@ -4,7 +4,7 @@ import { Container, Header } from 'semantic-ui-react';
 const Landing = () => (
   <Container text textAlign="center">
     <Header as="h1" size="huge">
-      Emaily
+      Survaily
     </Header>
     Collect data from your users through awesome Surveys!
   </Container>

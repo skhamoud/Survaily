@@ -55,7 +55,7 @@ class Header extends Component {
         <Container>
           <Menu.Item header>
             <Icon name="home" />
-            <Link to={auth ? '/surveys' : '/'}>Emaily</Link>
+            <Link to={auth ? '/surveys' : '/'}>Survaily</Link>
           </Menu.Item>
 
           <Menu.Item as={Link} active={activeLink === 'surveys'} name="surveys" to="/surveys">
