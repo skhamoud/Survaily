@@ -1,10 +1,12 @@
 import React from 'react';
-import { Button, Container, Header, Segment } from 'semantic-ui-react';
-
+import { Button, Header, Segment } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { sendSurvey } from '../../actions';
 
-const SurveyConfirmation = ({ survey, onCancel, sendSurvey }) => (
+const SurveyConfirmation = ({
+  survey, onCancel, sendSurvey, history,
+}) => (
   <div style={{ maxWidth: '500px', margin: '0 auto' }}>
     <Header textAlign="center">Confirm Survey Information</Header>
     <Segment basic size="small">
@@ -33,7 +35,7 @@ const SurveyConfirmation = ({ survey, onCancel, sendSurvey }) => (
       icon="checkmark"
       content="Next"
       labelPosition="right"
-      onClick={() => sendSurvey(survey)}
+      onClick={() => sendSurvey(survey, history)}
     />
   </div>
 );
@@ -43,4 +45,4 @@ export default connect(
     survey: form.surveyForm.values,
   }),
   { sendSurvey },
-)(SurveyConfirmation);
+)(withRouter(SurveyConfirmation));

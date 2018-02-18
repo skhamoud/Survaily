@@ -35,7 +35,7 @@ export const fetchSurveys = () => async (dispatch) => {
   if (res.ok) dispatch({ type: FETCH_USER_SURVEYS, surveys: await res.json() });
 };
 
-export const sendSurvey = survey => async (dispatch) => {
+export const sendSurvey = (survey, history) => async (dispatch) => {
   const res = await fetch('/api/surveys', {
     method: 'post',
     credentials: 'same-origin',
@@ -45,5 +45,8 @@ export const sendSurvey = survey => async (dispatch) => {
     }),
   });
 
-  if (res.ok) dispatch({ type: SEND_SURVEY, payload: await res.json() });
+  if (res.ok) {
+    dispatch({ type: SEND_SURVEY, payload: await res.json() });
+    history.push('/surveys');
+  }
 };

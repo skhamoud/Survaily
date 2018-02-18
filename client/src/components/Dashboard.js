@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container, Button, Header, Segment, Grid } from 'semantic-ui-react';
-import { connect } from 'react-redux';
 import Link from 'react-router-dom/Link';
 import styled from 'styled-components';
 
