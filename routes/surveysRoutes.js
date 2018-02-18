@@ -6,7 +6,7 @@ const requireCredits = require('../middlewares/requireCredits');
 const surveyTemplate = require('../services/emailTemplates/surveyTemplate');
 
 sgMail.setApiKey(require('../config/keys').sendGridKey);
-
+/** Hanldles Fetching surveys */
 router.get('/api/surveys', requireLogin, async (req, res) => {
   try {
     const surveys = await Survey.find({ _user: req.user.id });
@@ -16,6 +16,7 @@ router.get('/api/surveys', requireLogin, async (req, res) => {
   }
 });
 
+/** Handles creating a new Survey */
 router.post('/api/surveys', requireLogin, requireCredits, async (req, res) => {
   const {
     title, subject, body, recipients,
@@ -34,6 +35,9 @@ router.post('/api/surveys', requireLogin, requireCredits, async (req, res) => {
     to: survey.recipients.map(({ email }) => email),
     from: 'skhamoud@gmail.com',
     subject,
+    custom_args: {
+      surveyId: survey.id,
+    },
     text: body,
     html: surveyTemplate(survey),
   };
@@ -50,6 +54,23 @@ router.post('/api/surveys', requireLogin, requireCredits, async (req, res) => {
   } catch (err) {
     res.status(422).send({ error: err });
   }
+});
+
+/** Deals with Sendgrid notification webhook */
+router.post('/api/survey_wh', async (req, res) => {
+  const data = req.body;
+  console.log(data);
+  const { event, url_offset: link, surveyId } = data;
+  if (event === 'click') {
+    const survey = await Survey.findById(surveyId);
+    const clickedYes = link.index === 0;
+    const clickedNo = link.index === 1;
+
+    if (clickedYes) survey.yes += 1;
+    else if (clickedNo) survey.no += 1;
+    survey.save();
+  }
+  res.status(200);
 });
 
 router.get('/api/surveys/thanks', (req, res) => {
