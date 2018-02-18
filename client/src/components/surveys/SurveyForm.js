@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { Button, Form, Header, Message } from 'semantic-ui-react';
 import isEmail from 'validator/lib/isEmail';
@@ -73,12 +72,7 @@ const SurveyField = ({
 const decoratedForm = reduxForm({
   form: 'surveyForm',
   validate,
+  destroyOnUnmount: false,
 })(SurveyForm);
 
-function mapStateToProps({ surveyForm }, ownProps) {
-  return {
-    initialValues: (surveyForm && surveyForm.values) || ownProps.defaultForm,
-  };
-}
-
-export default connect(mapStateToProps)(decoratedForm);
+export default decoratedForm;
