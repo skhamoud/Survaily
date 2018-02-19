@@ -58,19 +58,23 @@ router.post('/api/surveys', requireLogin, requireCredits, async (req, res) => {
 
 /** Deals with Sendgrid notification webhook */
 router.post('/api/survey_wh', async (req, res) => {
-  const data = req.body;
-  console.log(data);
-  const { event, url_offset: link, surveyId } = data;
-  if (event === 'click') {
-    const survey = await Survey.findById(surveyId);
-    const clickedYes = link.index === 0;
-    const clickedNo = link.index === 1;
+  const events = req.body;
+  const surveysToUpdate = await Promise.all(events.map(async ({ event, url_offset: link, surveyId }) => {
+    if (event === 'click') {
+      const survey = await Survey.findById(surveyId);
+      const clickedYes = link.index === 0;
+      const clickedNo = link.index === 1;
 
-    if (clickedYes) survey.yes += 1;
-    else if (clickedNo) survey.no += 1;
-    survey.save();
-  }
-  res.status(200);
+      if (clickedYes) survey.yes += 1;
+      else if (clickedNo) survey.no += 1;
+      return survey;
+    }
+  }));
+  // Model.create() fires .save() internally for each doc , checkout
+  // .bulkWrite() for single trip to db .
+  const savedSurveys = await Survey.create(surveysToUpdate);
+  console.log(savedSurveys);
+  res.sendStatus(200);
 });
 
 router.get('/api/surveys/thanks', (req, res) => {
